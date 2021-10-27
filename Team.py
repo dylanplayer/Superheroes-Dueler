@@ -14,7 +14,7 @@ class Team:
         if not hero_is_found:
             return 0
 
-    def view_team (self):
+    def view_all_heroes (self):
         print(f'------- {self.name} -------')
         for hero in self.heroes:
             print(f'{hero.name}')
