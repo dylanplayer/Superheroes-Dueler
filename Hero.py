@@ -11,6 +11,8 @@ class Hero:
         self.current_health = starting_health
         self.abilities = []
         self.armors = []
+        self.deaths = 0
+        self.kills = 0
     
     def fight(self, opponent):
         if len(self.abilities) == 0 and len(opponent.abilities) == 0:
@@ -20,16 +22,20 @@ class Hero:
                 if len(self.abilities) > 0:
                     total_damage = self.attack()
                     if len(opponent.armors) > 0:
-                        total_damage -= opponent.block()
+                        total_damage -= opponent.defend()
                     opponent.take_damage(total_damage)
                 if len(opponent.abilities) > 0:
                     total_damage = opponent.attack()
                     if len(self.armors) > 0:
-                        total_damage -= self.block()
+                        total_damage -= self.defend()
                     self.take_damage(total_damage)
             if self.is_alive():
+                self.add_kill(1)
+                opponent.add_death(1)
                 print(f'{self.name} Wins')
             else:
+                opponent.add_kill(1)
+                self.add_death(1)
                 print(f'{opponent.name} Wins')
                 
 
@@ -60,35 +66,8 @@ class Hero:
     def is_alive(self):
         return self.current_health > 0
 
-if __name__ == "__main__":
-    # hero1 = Hero("Wonder Woman")
-    # hero2 = Hero("Dumbledore")
-    # ability1 = Ability("Super Speed", 300)
-    # ability2 = Ability("Super Eyes", 130)
-    # ability3 = Ability("Wizard Wand", 80)
-    # ability4 = Ability("Wizard Beard", 20)
-    # hero1.add_ability(ability1)
-    # hero1.add_ability(ability2)
-    # hero2.add_ability(ability3)
-    # hero2.add_ability(ability4)
-    # hero1.fight(hero2)
-    # hero = Hero("Wonder Woman")
-    # weapon = Weapon("Lasso of Truth", 90)
-    # hero.add_weapon(weapon)
-    # print(hero.attack())
-    # define an ability and a weapon
-    # both have the same max damage
-    # eye_rays = Ability('Eye Rays', 50)
-    # laser_blast = Weapon('Laser Blast', 50)
-    # Let's put these in an array together
-    # This list contains different types: Ability and Weapon
-    # powers = [eye_rays, laser_blast]
-    # We know that all Abilities and Weapons share the same attribute
-    # for power in powers:
-    # print(power.max_damage)
-    # We know that all Abilities and Weapns implement the attack method
-    # for power in powers:
-    # print(power.attack())
-    # Note! While both implement attack() a Weapon will always return 
-    # a higher average damage!
-    pass
+    def add_kill(self, num_kills):
+        self.kills += num_kills
+
+    def add_death(self, num_deaths):
+        self.deaths += num_deaths
